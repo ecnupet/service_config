@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-app-svc
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: nginx
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: nginx-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80 #gateway暴露80端口
+      name: http
+      protocol: HTTP
+    hosts: #gateway暴露的主机名
+    - "ecnu.space"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpnginx
+spec:
+  hosts: #virtual service的hosts字段与Gateway的servers.hosts字段需要匹配
+  - "ecnu.space" 
+  gateways:
+  - nginx-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /nginx
+    - uri:
+        prefix: /test
+    route:
+    - destination:
+        port:
+          number: 8000
+        host: nginx-app-svc
