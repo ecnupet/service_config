@@ -39,9 +39,9 @@ metadata:
   name: qiniu-app-vs
 spec:
   hosts: #virtual service的hosts字段与Gateway的servers.hosts字段需要匹配
-  - "ecnu.space" 
+  - "backend.ecnu.space" 
   gateways:
-  - gateway
+  - backend-gateway
   http:
   - match:
     - uri:
