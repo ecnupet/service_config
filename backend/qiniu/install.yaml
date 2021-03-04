@@ -16,7 +16,7 @@ spec:
       - name: qiniu
         image: registry.cn-shanghai.aliyuncs.com/ecnupet/qiniu:0.2.2
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 
 ---
 apiVersion: v1
@@ -27,8 +27,8 @@ spec:
   type: NodePort
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 80
+    port: 8080
+    targetPort: 8080
   selector:
     app: qiniu
 
@@ -49,5 +49,5 @@ spec:
     route:
     - destination:
         port:
-          number: 8000
+          number: 8080
         host: qiniu-app-svc
