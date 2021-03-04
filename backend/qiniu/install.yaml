@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: qiniu
-        image: registry.cn-beijing.aliyuncs.com/ecnupet/qiniu:0.2.4
+        image: registry.cn-beijing.aliyuncs.com/ecnupet/qiniu:0.2.5
         ports:
         - containerPort: 8080
 
