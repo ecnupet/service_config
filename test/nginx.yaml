@@ -33,36 +33,18 @@ spec:
 
 ---
 apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: nginx-gateway
-spec:
-  selector:
-    istio: ingressgateway # use Istio default gateway implementation
-  servers:
-  - port:
-      number: 80 #gateway暴露80端口
-      name: http
-      protocol: HTTP
-    hosts: #gateway暴露的主机名
-    - "ecnu.space"
-
----
-apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: httpnginx
+  name: nginx
 spec:
   hosts: #virtual service的hosts字段与Gateway的servers.hosts字段需要匹配
   - "ecnu.space" 
   gateways:
-  - nginx-gateway
+  - backend-gateway
   http:
   - match:
     - uri:
         prefix: /nginx
-    - uri:
-        prefix: /test
     route:
     - destination:
         port:
