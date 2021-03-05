@@ -47,6 +47,4 @@ spec:
         prefix: /nginx
     route:
     - destination:
-        port:
-          number: 8000
         host: nginx-app-svc
